@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: api-tests
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app # Manda tudo que esta em . (meu projeto) para /home/node/app
+    depends_on:
+      - mongo-db
+
+  mongo-db:
+    image: mongo:6.0.2
+    ports:
+      - 27017:27017
+    volumes:
+      - ./.docker/db-data:/var/lib/mongodb/data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  mongo-express:
+    image: mongo-express:0.54
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo-db
+      ME_CONFIG_MONGODB_AUTH_USERNAME: root
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: root
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: false
+    depends_on:
+      - mongo-db

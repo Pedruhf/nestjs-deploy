@@ -1,0 +1,9 @@
+node_modules
+dist
+.history
+.docker/db-data
+.git
+vscode
+docker-compose.yaml
+Dockerfile.dev
+Dockerfile.prod

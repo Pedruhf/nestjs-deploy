@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: api-tests-prod
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app # Manda tudo que esta em . (meu projeto) para /home/node/app
+      - /home/node/app/node_modules # Preserva node_modules
+      - /home/node/app/dist # Preserva dist
+    depends_on:
+      - mongo-db-prod
+
+  mongo-db-prod:
+    image: mongo:6.0.2
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
